@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting…</title>
+    <script>
+      // GitHub Pages serves this file for unknown paths. Send the deep link back through
+      // the app root, where RedirectFrom404 restores it with the router.
+      (function () {
+        var base = '/I-FALL'
+        var path = window.location.pathname
+        if (path.indexOf(base) === 0) path = path.slice(base.length)
+        if (!path) path = '/'
+        sessionStorage.setItem('ifall:redirect', path + window.location.search + window.location.hash)
+        window.location.replace(base + '/')
+      })()
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/I-FALL/">I FALL</a>…</p>
+    <p style="font-size: 12px; color: #7b7787">A Varun C Creation</p>
+  </body>
+</html>

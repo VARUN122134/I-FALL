@@ -12,6 +12,15 @@ dist
 dist-ssr
 *.local
 
+# Local analysis output — may contain real account data, never commit
+result/
+
+# Raw profile photo source; the cropped avatar is committed in src/assets
+PROFILE PIC/
+
+# Local notes / old prompt, not part of the app
+DETAILS.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

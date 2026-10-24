@@ -1,49 +1,167 @@
-import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import Footer from '../components/Footer'
 import './HowItWorks.css'
 
+type Device = 'mobile' | 'computer'
+
+interface Step {
+  title: string
+  description: string
+}
+
+const MOBILE_STEPS: Step[] = [
+  {
+    title: 'Open Instagram and go to your profile',
+    description:
+      'Open the Instagram app, sign in, and tap your profile picture in the bottom navigation.',
+  },
+  {
+    title: 'Open the menu and Settings',
+    description: 'Tap the menu in the top corner of your profile, then choose Settings.',
+  },
+  {
+    title: 'Open Accounts Center',
+    description:
+      'In Settings, select Accounts Center. Instagram moves this around occasionally, so look for Accounts Center if the wording differs.',
+  },
+  {
+    title: 'Open Your information and permissions',
+    description:
+      'Select "Your information and permissions", then tap "Export your information" (sometimes shown as "Download your information").',
+  },
+  {
+    title: 'Create the export',
+    description:
+      'Tap "Create export" and pick the Instagram profile you want to analyse if you manage more than one.',
+  },
+  {
+    title: 'Choose Export to device',
+    description: 'Select "Export to device" rather than exporting to another service.',
+  },
+  {
+    title: 'Select Followers and following',
+    description:
+      'Choose "Some of your information", then tick only Followers and following. That keeps the archive small and private.',
+  },
+  {
+    title: 'Use All time and JSON',
+    description:
+      'Set the date range to All time and the format to JSON. If a media quality option appears, choose Low.',
+  },
+  {
+    title: 'Start the export',
+    description:
+      'Confirm the request. Instagram prepares the archive in its own time, which can take hours or up to a couple of days.',
+  },
+  {
+    title: 'Download the ZIP',
+    description:
+      'When Instagram notifies you, return to Accounts Center, open the export, and tap Download. Verify your identity if asked, then save the ZIP to your phone.',
+  },
+  {
+    title: 'Come back to I FALL',
+    description:
+      'Upload the ZIP as-is. Do not extract it; the site finds the followers and following files itself.',
+  },
+]
+
+const COMPUTER_STEPS: Step[] = [
+  {
+    title: 'Open Instagram in Chrome and log in',
+    description:
+      'Go to instagram.com in Chrome and sign in to the account you want to analyse.',
+  },
+  {
+    title: 'Go to your profile',
+    description: 'Click your profile picture or avatar to open your profile page.',
+  },
+  {
+    title: 'Open More, then Settings',
+    description:
+      'Click "More" (the ☰ button in the bottom-left corner), then click Settings.',
+  },
+  {
+    title: 'Open Accounts Center',
+    description: 'Select Accounts Center from the Settings menu.',
+  },
+  {
+    title: 'Your information and permissions',
+    description:
+      'Choose "Your information and permissions", then click "Export your information" (also labelled "Download your information").',
+  },
+  {
+    title: 'Create the export',
+    description:
+      'Click "Create export" and select your Instagram profile if more than one is listed.',
+  },
+  {
+    title: 'Choose Export to device',
+    description: 'Pick "Export to device" so the archive is delivered to you as a download.',
+  },
+  {
+    title: 'Select Followers and following',
+    description:
+      'Choose "Some of your information", then tick Followers and following only. Nothing else is needed.',
+  },
+  {
+    title: 'Set the options',
+    description:
+      'Date range: All time. Format: JSON. Media quality: Low, if the option is shown. These settings are what I FALL expects.',
+  },
+  {
+    title: 'Start the export',
+    description:
+      'Click "Start export". Instagram prepares the archive in the background and notifies you when it is ready.',
+  },
+  {
+    title: 'Download the ZIP',
+    description:
+      'Return to Accounts Center, open the export, and click Download. Verify your identity if Instagram asks, then save the ZIP to your Downloads folder.',
+  },
+  {
+    title: 'Come back to I FALL',
+    description:
+      'Choose the ZIP on the upload screen. Do not extract it; the app locates the follower and following files automatically.',
+  },
+]
+
+const OPTIONS = [
+  ['Information', 'Followers and following'],
+  ['Date range', 'All time'],
+  ['Format', 'JSON'],
+  ['Media quality', 'Low, if requested'],
+]
+
 function HowItWorks() {
-  const [device, setDevice] = useState<'mobile' | 'computer'>('mobile')
-  const [currentStep, setCurrentStep] = useState(1)
+  const [device, setDevice] = useState<Device>('computer')
+  const [currentStep, setCurrentStep] = useState(0)
 
-  const mobileSteps = [
-    { number: 1, title: 'Open Instagram', description: 'Open the official Instagram app and sign in normally.' },
-    { number: 2, title: 'Open your profile', description: 'Tap your profile picture in the bottom navigation.' },
-    { number: 3, title: 'Open the Accounts Center', description: 'Open the menu on your profile and select Accounts Center. Instagram\'s interface may change, so look for Accounts Center if the menu differs.' },
-    { number: 4, title: 'Find information download', description: 'In Accounts Center, look for "Your information and permissions" then select the option for downloading or exporting your information.' },
-    { number: 5, title: 'Request a download', description: 'Select to download or export information. If asked which profile, choose the one you want to analyze. Choose download option if asked between downloading and transferring.' },
-    { number: 6, title: 'Select information', description: 'If you can choose specific info, select followers and following. If not, download the broader account information. Choose all available time or widest range.' },
-    { number: 7, title: 'Choose format', description: 'If format can be selected, choose JSON. If JSON not offered, HTML may work - the site supports it where possible.' },
-    { number: 8, title: 'Submit request', description: 'Confirm the request and wait. Preparation may take some time - you may need to return later.' },
-    { number: 9, title: 'Download the archive', description: 'When notified it\'s ready, go back to download area in Accounts Center and download the archive. It will usually be a ZIP file.' },
-    { number: 10, title: 'Return to I FALL', description: 'Open I FALL again and select the downloaded ZIP file. Don\'t extract it - the site will locate files automatically.' },
-  ]
+  const steps = device === 'mobile' ? MOBILE_STEPS : COMPUTER_STEPS
+  const stepIndex = Math.min(currentStep, steps.length - 1)
+  const activeStep = steps[stepIndex]
+  const progress = ((stepIndex + 1) / steps.length) * 100
 
-  const computerSteps = [
-    { number: 1, title: 'Open Instagram in browser', description: 'Open Instagram in a browser and sign in.' },
-    { number: 2, title: 'Open Accounts Center', description: 'Open the profile menu and navigate to Accounts Center.' },
-    { number: 3, title: 'Find download option', description: 'Find "Your information and permissions" and select the download/export information option.' },
-    { number: 4, title: 'Choose profile', description: 'Choose the relevant Instagram profile.' },
-    { number: 5, title: 'Select information', description: 'Select followers and following if selective export is available.' },
-    { number: 6, title: 'Choose format', description: 'Choose JSON if offered.' },
-    { number: 7, title: 'Request archive', description: 'Request the archive.' },
-    { number: 8, title: 'Wait for preparation', description: 'Wait for Instagram to prepare it.' },
-    { number: 9, title: 'Download ZIP', description: 'Download the resulting ZIP file to your computer.' },
-    { number: 10, title: 'Return to I FALL', description: 'Return to I FALL, click the upload area and select the downloaded ZIP file.' },
-  ]
-
-  const steps = device === 'mobile' ? mobileSteps : computerSteps
+  const changeDevice = (next: Device) => {
+    const nextSteps = next === 'mobile' ? MOBILE_STEPS : COMPUTER_STEPS
+    setDevice(next)
+    setCurrentStep((index) => Math.min(index, nextSteps.length - 1))
+  }
 
   return (
     <div className="howitworks">
       <header className="header">
-        <div className="container">
+        <div className="container header-inner">
           <Link to="/" className="logo-link">
-            <h1 className="logo">I FALL</h1>
+            <span className="logo">I FALL</span>
           </Link>
-          <nav className="nav">
-            <Link to="/" className="nav-link">Home</Link>
-            <Link to="/upload" className="nav-button">Get Started</Link>
+          <nav className="nav" aria-label="Main">
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
+            <Link to="/upload" className="nav-button">
+              Get started
+            </Link>
           </nav>
         </div>
       </header>
@@ -51,98 +169,154 @@ function HowItWorks() {
       <main>
         <section className="tutorial-header">
           <div className="container">
-            <h1 className="tutorial-title">How to Download Your Instagram Data</h1>
-            <p className="tutorial-subtitle">Follow these steps to get your export file, then upload it to I FALL</p>
+            <h1 className="tutorial-title">How to download your Instagram data</h1>
+            <p className="tutorial-subtitle">
+              Follow the steps for your device. When you finish you will have a ZIP file to bring
+              back here. I FALL never asks for your Instagram password.
+            </p>
           </div>
         </section>
 
         <section className="tutorial-content">
           <div className="container">
-            <div className="device-toggle">
+            <div className="device-toggle" role="group" aria-label="Choose your device">
               <button
-                className={`toggle-btn ${device === 'mobile' ? 'active' : ''}`}
-                onClick={() => { setDevice('mobile'); setCurrentStep(1) }}
+                type="button"
+                className={`toggle-btn ${device === 'computer' ? 'is-active' : ''}`}
+                aria-pressed={device === 'computer'}
+                onClick={() => changeDevice('computer')}
               >
-                📱 Mobile App
+                <span aria-hidden="true">💻</span> Computer
               </button>
               <button
-                className={`toggle-btn ${device === 'computer' ? 'active' : ''}`}
-                onClick={() => { setDevice('computer'); setCurrentStep(1) }}
+                type="button"
+                className={`toggle-btn ${device === 'mobile' ? 'is-active' : ''}`}
+                aria-pressed={device === 'mobile'}
+                onClick={() => changeDevice('mobile')}
               >
-                💻 Computer
+                <span aria-hidden="true">📱</span> Mobile app
               </button>
             </div>
 
-            <div className="progress-indicator">
-              Step {currentStep} of {steps.length}
+            <div className="progress-wrap">
+              <div className="progress-indicator">
+                <span>
+                  Step {stepIndex + 1} of {steps.length}
+                </span>
+                <span className="progress-percent">{Math.round(progress)}%</span>
+              </div>
+              <div
+                className="progress-track"
+                role="progressbar"
+                aria-valuemin={1}
+                aria-valuemax={steps.length}
+                aria-valuenow={stepIndex + 1}
+                aria-label="Tutorial progress"
+              >
+                <div className="progress-fill" style={{ width: `${progress}%` }} />
+              </div>
             </div>
 
-            <div className="steps-list">
-              {steps.map((step) => (
-                <div
-                  key={step.number}
-                  className={`tutorial-step ${currentStep === step.number ? 'active' : ''}`}
-                  onClick={() => setCurrentStep(step.number)}
-                >
-                  <div className="step-header">
-                    <div className="step-number-badge">{step.number}</div>
-                    <h3>{step.title}</h3>
-                  </div>
-                  {currentStep === step.number && (
-                    <p className="step-description">{step.description}</p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <ol className="steps-list">
+              {steps.map((step, index) => {
+                const isActive = index === stepIndex
+                return (
+                  <li key={step.title}>
+                    <button
+                      type="button"
+                      className={`tutorial-step ${isActive ? 'is-active' : ''}`}
+                      aria-expanded={isActive}
+                      aria-current={isActive ? 'step' : undefined}
+                      onClick={() => setCurrentStep(index)}
+                    >
+                      <span className="step-header">
+                        <span className="step-number-badge">{index + 1}</span>
+                        <span className="step-title">{step.title}</span>
+                      </span>
+                      {isActive && <span className="step-description">{step.description}</span>}
+                    </button>
+                  </li>
+                )
+              })}
+            </ol>
 
             <div className="tutorial-actions">
               <button
+                type="button"
                 className="btn btn-secondary"
-                onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-                disabled={currentStep === 1}
+                onClick={() => setCurrentStep(Math.max(0, stepIndex - 1))}
+                disabled={stepIndex === 0}
               >
-                ← Previous
+                <span aria-hidden="true">←</span> Previous
               </button>
               <button
-                className="btn btn-secondary"
-                onClick={() => setCurrentStep(Math.min(steps.length, currentStep + 1))}
-                disabled={currentStep === steps.length}
+                type="button"
+                className="btn btn-primary"
+                onClick={() => setCurrentStep(Math.min(steps.length - 1, stepIndex + 1))}
+                disabled={stepIndex === steps.length - 1}
               >
-                Next →
+                Next <span aria-hidden="true">→</span>
               </button>
             </div>
 
-            <div className="mobile-tips">
-              <h3>📱 Mobile Tips</h3>
-              <ul>
-                <li>When the file picker opens, look in Downloads, Recent files, or where your browser saves files</li>
-                <li>File management screens vary by Android/iPhone - look for generic options</li>
-                <li>The downloaded file will usually be a ZIP file</li>
-              </ul>
+            <p className="step-announcement" aria-live="polite">
+              {activeStep.title}
+            </p>
+
+            <div className="options-card">
+              <h2>Use exactly these options</h2>
+              <table>
+                <tbody>
+                  {OPTIONS.map(([setting, value]) => (
+                    <tr key={setting}>
+                      <th scope="row">{setting}</th>
+                      <td>{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
-            <div className="checklist">
-              <h3>✅ Final Checklist</h3>
-              <p>Before uploading to I FALL, make sure you have:</p>
-              <ul>
-                <li>Downloaded the ZIP file from Instagram</li>
-                <li>Don't need to extract it - upload as-is</li>
-                <li>It's ready to upload from your device</li>
-              </ul>
+            <div className="tips-grid">
+              <div className="info-card">
+                <h2>📱 Finding the download</h2>
+                <ul>
+                  <li>Check Downloads, Recent files, or wherever your browser saves files.</li>
+                  <li>The file is usually named <code>instagram-username-YYYY-MM-DD.zip</code>.</li>
+                  <li>Android and iPhone file screens differ, so use the generic folders above.</li>
+                </ul>
+              </div>
+
+              <div className="info-card">
+                <h2>✅ Ready to upload?</h2>
+                <ul>
+                  <li>The file ends in <strong>.zip</strong></li>
+                  <li>It was exported as JSON, not HTML</li>
+                  <li>It contains both followers and following</li>
+                  <li>You have not extracted it</li>
+                </ul>
+              </div>
+
+              <div className="info-card">
+                <h2>🔒 Keep it private</h2>
+                <ul>
+                  <li>Export only followers and following, not your whole account history.</li>
+                  <li>An export can contain personal information; keep it off shared machines.</li>
+                  <li>I FALL reads the file locally and never uploads it.</li>
+                </ul>
+              </div>
             </div>
 
             <div className="continue-section">
-              <Link to="/upload" className="btn btn-primary btn-large">Continue to Upload</Link>
+              <Link to="/upload" className="btn btn-primary btn-large">
+                Continue to upload
+              </Link>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="container">
-          <p className="footer-text">I FALL is not affiliated with or endorsed by Instagram or Meta.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
