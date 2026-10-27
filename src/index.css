@@ -64,6 +64,14 @@ body {
   background: var(--bg);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.24);
+}
+
 /* ============================================================
    Typography
    ============================================================ */
@@ -150,13 +158,33 @@ main {
 }
 
 .nav-link {
+  position: relative;
   color: var(--text-light);
   font-weight: 500;
   font-size: 0.95rem;
 }
 
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
 .nav-link:hover {
   color: var(--accent);
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .nav-button {
@@ -169,12 +197,17 @@ main {
   font-weight: 550;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: background var(--transition);
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .nav-button:hover {
   background: var(--accent-hover);
   color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(107, 70, 193, 0.24);
 }
 
 /* ============================================================
@@ -254,6 +287,10 @@ main {
   background: var(--accent-light);
 }
 
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+}
+
 .btn-link {
   background: none;
   border: 0;
@@ -265,6 +302,74 @@ main {
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* ============================================================
+   Motion
+   ============================================================ */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/*
+ * `backwards` keeps content hidden during a delay, then hands control back to
+ * normal styles when the animation ends so hover transforms still work.
+ */
+.anim-up {
+  animation: fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.anim-fade {
+  animation: fade-in 500ms ease backwards;
 }
 
 /* ============================================================
@@ -293,6 +398,7 @@ main {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
@@ -315,10 +421,26 @@ main {
 }
 
 .progress-fill {
+  position: relative;
+  overflow: hidden;
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--accent), #8b5cf6);
   transition: width 220ms ease;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 80%
+  );
+  transform: translateX(-120%);
+  animation: shimmer 2.2s ease-in-out infinite;
 }
 
 /* ============================================================

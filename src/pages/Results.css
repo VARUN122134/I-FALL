@@ -14,6 +14,7 @@
 /* ---------- Heading ---------- */
 .results-header {
   padding: 2.75rem 0 1.5rem;
+  animation: fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .results-title {
@@ -47,6 +48,37 @@
   border-radius: var(--radius);
   padding: 1.1rem 1.25rem;
   box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+  animation: fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.summary-card:nth-child(1) {
+  animation-delay: 60ms;
+}
+
+.summary-card:nth-child(2) {
+  animation-delay: 110ms;
+}
+
+.summary-card:nth-child(3) {
+  animation-delay: 160ms;
+}
+
+.summary-card:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+.summary-card:nth-child(5) {
+  animation-delay: 260ms;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(107, 70, 193, 0.25);
+  box-shadow: var(--shadow);
 }
 
 .summary-card-accent {
@@ -90,6 +122,7 @@
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
   scrollbar-width: thin;
+  animation: fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) 220ms backwards;
 }
 
 .tab {
@@ -145,6 +178,7 @@
   align-items: center;
   flex-wrap: wrap;
   padding: 1.1rem 0 0.75rem;
+  animation: fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) 280ms backwards;
 }
 
 .search-field {
@@ -202,6 +236,7 @@
   font-size: 0.8125rem;
   color: var(--text-light);
   cursor: pointer;
+  animation: fade-in 300ms ease backwards;
 }
 
 .inactive-toggle input {
@@ -233,6 +268,39 @@
   padding: 0.8rem 1rem;
   border-bottom: 1px solid var(--border);
   transition: background var(--transition);
+  animation: fade-up 320ms ease backwards;
+}
+
+.result-item:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.result-item:nth-child(2) {
+  animation-delay: 30ms;
+}
+
+.result-item:nth-child(3) {
+  animation-delay: 60ms;
+}
+
+.result-item:nth-child(4) {
+  animation-delay: 90ms;
+}
+
+.result-item:nth-child(5) {
+  animation-delay: 120ms;
+}
+
+.result-item:nth-child(6) {
+  animation-delay: 150ms;
+}
+
+.result-item:nth-child(7) {
+  animation-delay: 180ms;
+}
+
+.result-item:nth-child(8) {
+  animation-delay: 210ms;
 }
 
 .result-item:last-child {
@@ -277,10 +345,20 @@
   white-space: nowrap;
 }
 
+.profile-link span {
+  display: inline-block;
+  transition: transform var(--transition);
+}
+
+.profile-link:hover span {
+  transform: translateX(3px);
+}
+
 /* ---------- Empty ---------- */
 .empty-state {
   padding: 3rem 1.5rem;
   text-align: center;
+  animation: fade-in 300ms ease backwards;
 }
 
 .empty-state p {

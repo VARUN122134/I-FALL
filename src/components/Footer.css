@@ -16,6 +16,8 @@
   inset: 0 0 auto 0;
   height: 4px;
   background: linear-gradient(90deg, #6b46c1, #8b5cf6 45%, #ec4899 80%, #f59e0b);
+  background-size: 220% 100%;
+  animation: gradient-pan 9s linear infinite;
 }
 
 .footer-inner {
@@ -45,6 +47,14 @@
   border-radius: 50%;
   background: linear-gradient(140deg, #6b46c1, #a855f7 52%, #ec4899);
   box-shadow: 0 16px 38px rgba(107, 70, 193, 0.3);
+  transition:
+    transform 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.footer-portrait-wrap:hover {
+  transform: scale(1.03) rotate(-1deg);
+  box-shadow: 0 20px 46px rgba(107, 70, 193, 0.36);
 }
 
 .footer-portrait {
@@ -89,7 +99,9 @@
   margin-bottom: 0.7rem;
   padding: 0.32rem 0.85rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, #6b46c1, #8b5cf6);
+  background: linear-gradient(120deg, #6b46c1, #8b5cf6, #ec4899);
+  background-size: 200% 100%;
+  animation: gradient-pan 7s linear infinite;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
